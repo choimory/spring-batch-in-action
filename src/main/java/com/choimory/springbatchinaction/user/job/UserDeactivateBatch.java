@@ -1,5 +1,6 @@
 package com.choimory.springbatchinaction.user.job;
 
+import com.choimory.springbatchinaction.common.batch.BugFixedRunIdIncrementer;
 import com.choimory.springbatchinaction.common.batch.QuerydslPagingItemReader;
 import com.choimory.springbatchinaction.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,6 +34,7 @@ public class UserDeactivateBatch {
     @Bean(PREFIX + "Job")
     public Job userDeactivateJob(){
         return jobBuilderFactory.get(PREFIX + "Job")
+                .incrementer(new BugFixedRunIdIncrementer())
                 .start(userDeactivateStep())
                 .build();
     }
