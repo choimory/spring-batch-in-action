@@ -53,20 +53,23 @@ public class UserDeactivateBatch {
     @Bean(PREFIX + "Reader")
     @StepScope
     public QuerydslPagingItemReader<User> reader(){
-        return new QuerydslPagingItemReader<>(entityManagerFactory,
-                PAGE_SIZE,
+        QuerydslPagingItemReader<User> reader =  new QuerydslPagingItemReader<>(entityManagerFactory, PAGE_SIZE,
                 query -> query.select(user)
                         .from(user)
                         .where(user.lastLoginDateTime.before(LocalDateTime.now()
                                 .minusYears(1))));
+
+        reader.setMaxItemCount(1000);
+
+        return reader;
     }
 
     private ItemProcessor<User, User> processor(){
-        return user -> {
-            user.setIsActivated(false);
-            user.setPassword("changed");
-            return user;
-        };
+        return user -> User.builder()
+                .idx(user.getIdx())
+                .isActivated(false)
+                .password("changed")
+                .build();
     }
 
     private JpaItemWriter<User> writer(){
