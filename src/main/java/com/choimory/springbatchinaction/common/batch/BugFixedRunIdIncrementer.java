@@ -10,7 +10,7 @@ public class BugFixedRunIdIncrementer extends RunIdIncrementer {
     @Override
     public JobParameters getNext(JobParameters parameters) {
         JobParameters jobParameters = (parameters == null) ? new JobParameters() : parameters;
-        return new JobParametersBuilder().addLong(RUN_ID, parameters.getLong(RUN_ID))
+        return new JobParametersBuilder().addLong(RUN_ID, jobParameters.getLong(RUN_ID, 0L)+1)
                 .toJobParameters();
     }
 }
