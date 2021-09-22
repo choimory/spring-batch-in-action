@@ -65,11 +65,17 @@ public class UserDeactivateBatch {
     }
 
     private ItemProcessor<User, User> processor(){
-        return user -> User.builder()
+        return user -> {
+            user.setIsActivated(false);
+            return user;
+        };
+
+        /*기존 레코드 업데이트 테스트*/
+        /*return user -> User.builder()
                 .idx(user.getIdx())
                 .isActivated(false)
                 .password("changed")
-                .build();
+                .build();*/
     }
 
     private JpaItemWriter<User> writer(){
